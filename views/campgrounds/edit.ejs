@@ -1,0 +1,37 @@
+<% layout('/layouts/boilerplate.ejs') %>
+<div class="row">
+	<h1 class="text-center">Edit Campground</h1>
+	<div class="col-6 offset-3">
+		<form action="/campgrounds/<%=camp._id%>?_method=PATCH" method="POST">
+			<div class="mb-3">
+				<label class="form-label" for="title">Enter the new Name</label>
+				<input class="form-control" type="text" name="campground[title]" id="title" value="<%=camp.title%>">
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="location">Enter new Location</label>
+				<input class="form-control" type="text" name="campground[location]" id="location" value="<%=camp.location%>">
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="image">Image URL</label>
+				<input class="form-control" type="text" name="campground[image]" id="image" value="<%=camp.image%>">
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="description">Description</label>
+				<textarea class="form-control" type="text" name="campground[description]" id="description"><%=camp.description%></textarea>
+			</div>
+			<div class="mb-3">
+				<label for="price">Campground Price</label>
+				<div class="input-group mb-3">
+					<span class="input-group-text">&#8377;</span>
+					<input type="text" class="form-control" id="price" placeholder="0.00" name="campground[price]" value="<%=camp.price%>">
+				</div>
+			</div>
+			<div class="my-3">
+				<button class="btn btn-info  text-light">Update</button>
+			</div>
+		</form>
+		<a href="/campgrounds/<%=camp._id%>" class="btn btn-danger">Cancel</a>
+	</div>
+</div>
+
+	
