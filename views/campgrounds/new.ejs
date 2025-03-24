@@ -2,28 +2,43 @@
 <div class="row">
 	<h1 class="text-center">New Campground</h1>
 	<div class="col-6 offset-3">
-		<form action="/campgrounds" method="POST">
+		<form action="/campgrounds" method="POST" class="needs-validation" novalidate>
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter the Name of Campground</label>
-				<input class="form-control" type="text" name="campground[title]" id="title">
+				<input class="form-control" type="text" name="campground[title]" id="title" required>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+					Please provide a valid Name.
+				</div>
 			</div>
 			<div class="mb-3">
 				<label class="form-label" for="location">Enter Location</label>
-				<input class="form-control" type="text" name="campground[location]" id="location">
+				<input class="form-control" type="text" name="campground[location]" id="location" required>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
 			</div>
 			<div class="mb-3">
 				<label class="form-label" for="image">Image URL</label>
-				<input class="form-control" type="text" name="campground[image]" id="image">
+				<input class="form-control" type="text" name="campground[image]" id="image" required>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
 			</div>
 			<div class="mb-3">
 				<label class="form-label" for="description">Description</label>
-				<textarea class="form-control" type="text" name="campground[description]" id="description"></textarea>
+				<textarea class="form-control" type="text" name="campground[description]" id="description" required></textarea>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
 			</div>
 			<div class="mb-3">
 				<label for="price">Campground Price</label>
 				<div class="input-group mb-3">
 					<span class="input-group-text">&#8377;</span>
-					<input type="text" class="form-control" id="price" placeholder="0.00" name="campground[price]">
+					<input type="text" class="form-control" id="price" placeholder="0.00" name="campground[price]" required>
 				</div>
 			</div>
 			<div class="my-3">
@@ -33,3 +48,4 @@
 		<a href="/campgrounds">Cancel</a>
 	</div>
 </div>
+	

@@ -13,7 +13,7 @@
 				<li class="list-group-item">Price: &#8377;<%=camp.price%> / Night</li>
 			</ul>
 			<div class="card-body">
-				<a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-info text-light my-2">Edit this Campground</a>
+				<a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-primary text-light my-2">Edit this Campground</a>
 				<form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
 					<button class="btn btn-danger my-2">Delete this Campground</button>
 				</form>
