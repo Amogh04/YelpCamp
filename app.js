@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
+const flash = require('connect-flash');
+const ExpressError = require('./utilities/ExpressError');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 
@@ -30,12 +32,18 @@ const sessionConfig = {
 	}
 }
 app.use(session(sessionConfig));
+app.use(flash());
 
 app.engine('ejs',ejsMate);
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 
-
+//Middleware for flash messages
+app.use((req,res,next) => {
+	res.locals.success = req.flash('success');
+	res.locals.error = req.flash('error');
+	next();
+});
 
 app.use('/campgrounds', campgroundRoutes);	
 app.use('/campgrounds/:id/reviews', reviewRoutes);	

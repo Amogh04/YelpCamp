@@ -38,7 +38,10 @@
 				<label for="price">Campground Price</label>
 				<div class="input-group mb-3">
 					<span class="input-group-text">&#8377;</span>
-					<input type="text" class="form-control" id="price" placeholder="0.00" name="campground[price]" required>
+					<input type="number" class="form-control" id="price" placeholder="0.00" name="campground[price]" required min="0">
+					<div class="invalid-feedback">
+						Enter a valid price!
+					</div>
 				</div>
 			</div>
 			<div class="my-3">
