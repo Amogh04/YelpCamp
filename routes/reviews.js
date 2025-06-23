@@ -5,11 +5,11 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-
+const {checkLogin} = require('../utilities/middleware');
 const router = express.Router({mergeParams: true});
 
 
-router.post('/', validateReview, catchAsync(async (req,res) => {
+router.post('/', checkLogin, validateReview, catchAsync(async (req,res) => {
 	const campground = await Campground.findById(req.params.id);
 	const review = new Review(req.body.review);
 	await review.save();
@@ -20,7 +20,7 @@ router.post('/', validateReview, catchAsync(async (req,res) => {
 }));
 	
 
-router.delete('/:reviewId', catchAsync(async (req,res) =>	 {
+router.delete('/:reviewId', checkLogin, catchAsync(async (req,res) =>	 {
 	const {id, reviewId} = req.params;
 	await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
 	await Review.findByIdAndDelete(reviewId);
