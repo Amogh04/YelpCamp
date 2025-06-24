@@ -4,7 +4,7 @@ const validateCampground = require('../utilities/validateCampground');
 const Campground = require('../models/campground');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-const {checkLogin} = require('../utilities/middleware');
+const {checkLogin, isAuthor} = require('../utilities/middleware');
 const router = express.Router();
 
 
@@ -16,7 +16,8 @@ router.get('/', catchAsync(async (req,res) => {
 // validateCampground is a MIDDLEWARE FUNCTION that checks if the campground data is valid before proceeding to create a new campground.
 router.post('/', checkLogin, validateCampground, catchAsync(async (req,res) => {
     // if(!req.body.campground)	throw new ExpressError(400,'Invalid Campground Data');
-    const newCamp = new Campground(req.body.campground)
+    const newCamp = new Campground(req.body.campground);
+    newCamp.author = req.user._id;
     await newCamp.save();
     req.flash('success', 'Successfully made a new Campground!');
     res.redirect(`/campgrounds/${newCamp._id}`);
@@ -26,13 +27,8 @@ router.get('/new', checkLogin, (req,res) => {
     res.render('campgrounds/new');
 });
 
-router.get('/:id/edit', checkLogin, catchAsync(async (req,res) => {
-    const id = req.params.id;
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        req.flash('error', `That's not a valid Campground!`);
-        return res.redirect('/campgrounds');
-    }
-    const camp = await Campground.findById(id);
+router.get('/:id/edit', checkLogin, isAuthor, catchAsync(async (req,res) => {
+    const camp = await Campground.findById(req.params.id);
     if(!camp){
         req.flash('error', `That's not a valid Campground!`);
         return res.redirect('/campgrounds');
@@ -46,7 +42,12 @@ router.get('/:id', catchAsync(async (req,res) => {
         req.flash('error', `That's not a valid Campground!`);
         return res.redirect('/campgrounds');
     }
-    const camp = await Campground.findById(id).populate('reviews');
+    let camp = await Campground.findById(id).populate('author').populate({
+                        path:'reviews', 
+                        populate:{
+                            path:'author'
+                        }
+                    });
     if(!camp){
         req.flash('error', `That's not a valid Campground!`);
         return res.redirect('/campgrounds');
@@ -54,14 +55,13 @@ router.get('/:id', catchAsync(async (req,res) => {
     res.render('campgrounds/show',{camp});
 }));
 
-router.patch('/:id', checkLogin, validateCampground, catchAsync(async (req,res) => {
-    const camp = req.body.campground;
-    const campground = await Campground.findByIdAndUpdate(req.params.id,{...camp});
+router.patch('/:id', checkLogin, isAuthor, validateCampground, catchAsync(async (req,res) => {
+    const camp = await Campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
     req.flash('success', 'Successfully updated the Campground!');
-    res.redirect(`/campgrounds/${campground._id}`);
+    res.redirect(`/campgrounds/${camp._id}`);
 }));
 
-router.delete('/:id', checkLogin, catchAsync(async (req,res) => {
+router.delete('/:id', checkLogin, isAuthor, catchAsync(async (req,res) => {
 	await Campground.findByIdAndDelete(req.params.id);
     req.flash('success', 'Successfully deleted the Campground!');
 	res.redirect('/campgrounds');

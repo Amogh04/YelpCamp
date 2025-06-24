@@ -38,7 +38,7 @@ router.post('/login', redirectTo, passportMiddleware, (req, res) => {
     const redirectUrl = res.locals.redirectTo || '/campgrounds';
     req.flash('success', 'Logged in!');
     res.redirect(redirectUrl);
-});
+}); 
 
 router.get('/logout', (req, res, next) => {
     req.logout( function (err) {

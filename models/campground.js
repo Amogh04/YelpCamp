@@ -1,17 +1,22 @@
 const mongoose = require('mongoose');
 const review = require('./review');
+const User = require('./user');
 const Schema = mongoose.Schema;		//Shortcut to call it Schema instead of mongoose.Schema 
 
 const CampgroundSchema = new Schema({
-	title:String,
-	image:String,
-	price:Number,
-	description:String,
-	location:String,
-	reviews:[{
+	title: String,
+	image: String,
+	price: Number,
+	description: String,
+	location: String,
+	reviews: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Review'
-	}]
+	}],
+	author: {
+		type: Schema.Types.ObjectId,
+		ref: 'User'
+	}
 });
 
 CampgroundSchema.post('findOneAndDelete', async function(doc) {

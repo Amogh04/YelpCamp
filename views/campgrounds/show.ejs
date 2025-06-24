@@ -11,13 +11,16 @@
 			<ul class="list-group list-group-flush">
 				<li class="list-group-item"><%=camp.location%></li>
 				<li class="list-group-item">Price: &#8377;<%=camp.price%> / Night</li>
+				<li class="list-group-item">Submitted By: <%=camp.author.username%></li>
 			</ul>
+			<%if(currentUser && camp.author._id.equals(currentUser._id)){%>
 			<div class="card-body">
 				<a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-primary text-light my-2">Edit this Campground</a>
 				<form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
 					<button class="btn btn-danger my-2">Delete this Campground</button>
 				</form>
 			</div>
+			<%}%>
 
 			<div class="card-footer text-muted">
 				<%=Math.floor(Math.random()*25+1)%> days ago
@@ -25,22 +28,24 @@
 		</div>
 	</div>
 	<div class="col-6">
-		<h2>Leave a Review</h2>
-		<form method="POST" action="/campgrounds/<%=camp._id%>/reviews" class="mb-3 needs-validation" novalidate>
-			<div class="mb-3">
-				<label class="form-label" for="rating">Rating</label>
-				<input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-			</div>
-			<label class="form-label" for="body">Review:</label>
-			<textarea class="form-control" name="review[body]" id="body" cols="60" rows="3" required></textarea>
-			<div class="valid-feedback">
-					Looks good!
+		<%if(currentUser){%>
+			<h2>Leave a Review</h2>
+			<form method="POST" action="/campgrounds/<%=camp._id%>/reviews" class="mb-3 needs-validation" novalidate>
+				<div class="mb-3">
+					<label class="form-label" for="rating">Rating</label>
+					<input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
 				</div>
-				<div class="invalid-feedback">
-					Please provide a valid Feedback.
-				</div>
-			<button class="mt-3 btn btn-success">Add Review</button>
-		</form>
+				<label class="form-label" for="body">Review:</label>
+				<textarea class="form-control" name="review[body]" id="body" cols="60" rows="3" required></textarea>
+				<div class="valid-feedback">
+						Looks good!
+					</div>
+					<div class="invalid-feedback">
+						Please provide a valid Feedback.
+					</div>
+				<button class="mt-3 btn btn-success">Add Review</button>
+			</form>
+		<%}%>
 		<h2>Reviews</h2>
 		<% if (camp.reviews.length > 0) { %>
 			<ul class="list-group mb-3">
@@ -49,11 +54,13 @@
 						<strong><%=review.rating%> Stars</strong>
 						<p>
 							<%=review.body%>
+							<%if(currentUser && review.author._id.equals(currentUser._id)){%>
 							<form class="d-inline" action="/campgrounds/<%=camp._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
 								<button class="btn btn-danger">Delete</button>
 							</form>
+							<%}%>
 						</p>
-						<small class="text-muted">Reviewed by Mr. X on 69th June</small>
+						<small class="text-muted">Reviewed by <%=review.author.username%> on <%=review.dateCreated%></small>
 					</li>
 					
 				<% }) %>
