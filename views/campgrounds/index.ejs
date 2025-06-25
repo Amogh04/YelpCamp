@@ -7,9 +7,13 @@
 <%for(let i=campgrounds.length-1;i>=0;--i){%>
 <div class="card mb-3">
   <div class="row">
-  <div class="col-md-3">
-  		<img class="img-fluid" src="<%=campgrounds[i].image%>">
-  	</div>
+
+	<%if(campgrounds[i].images.length>0){%>
+  	<div class="col-md-3">
+  		<img class="img-fluid" src="<%=campgrounds[i].images[0].url%>">
+	</div>
+	<%}%>
+
   	<div class="card-body">
 	  	<h5 class="card-title"><%=campgrounds[i].title%></h5>
 	    <p class="card-text"><%=campgrounds[i].description%></p>

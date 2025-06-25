@@ -5,7 +5,12 @@ const Schema = mongoose.Schema;		//Shortcut to call it Schema instead of mongoos
 
 const CampgroundSchema = new Schema({
 	title: String,
-	image: String,
+	images: [
+		{
+			url: String,
+			filname: String
+		}
+	],
 	price: Number,
 	description: String,
 	location: String,

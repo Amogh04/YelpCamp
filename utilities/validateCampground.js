@@ -6,13 +6,12 @@ const campgroundSchema = Joi.object({			//JOI schema to Validate campgrounds fro
 		title: Joi.string().required(),
 		price: Joi.number().required().min(0),
 		location: Joi.string().required(),
-		description: Joi.string().required(),
-		image: Joi.string().required()
+		description: Joi.string().required()
 	}).required()
 });
 
 module.exports  = (req,res,next) => {
-    const {error} = campgroundSchema.validate(req.body);
+    const {error} = campgroundSchema.validate(req.body.campground);
     if(error){
         const msg = error.details.map(x => x.message).join(',');
         throw new ExpressError(400,msg);
