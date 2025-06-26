@@ -2,7 +2,7 @@
 <div class="row">
 	<h1 class="text-center">Edit Campground</h1>
 	<div class="col-6 offset-3">
-		<form action="/campgrounds/<%=camp._id%>?_method=PATCH" method="POST" novalidate class="needs-validation">
+		<form action="/campgrounds/<%=camp._id%>?_method=PATCH" enctype="multipart/form-data" method="POST" novalidate class="needs-validation">
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter the new Name</label>
 				<input class="form-control" type="text" name="campground[title]" id="title" value="<%=camp.title%>" required>
@@ -21,10 +21,9 @@
 				</div>
 			</div>
 			<div class="mb-3">
-				<label class="form-label" for="image">Image URL</label>
-				<input class="form-control" type="text" name="campground[image]" id="image" value="<%=camp.image%>" required>
-				<div class="valid-feedback">
-					Looks good!
+				<label class="form-label" for="image">Upload Images</label>
+				<div class="input-group mb-3">
+					<input type="file" class="form-control" id="image" name="image" multiple>
 				</div>
 			</div>
 			<div class="mb-3">

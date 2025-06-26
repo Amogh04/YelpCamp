@@ -15,12 +15,14 @@ router.route('/')
 
 router.get('/new', checkLogin, (req,res) => res.render('campgrounds/new'));
 
+router.get('/:id/edit', checkLogin, isAuthor, catchAsync(campgrounds.viewEditCampground));
+router.delete('/:id/:imageId', checkLogin, isAuthor, catchAsync(campgrounds.deleteImage));
+
 router.route('/:id')
     .get(catchAsync(campgrounds.showCampground))
-    .patch(checkLogin, isAuthor, validateCampground, catchAsync(campgrounds.editCampground))
+    .patch(checkLogin, isAuthor, validateCampground, upload.array('image'), catchAsync(campgrounds.editCampground))
     .delete(checkLogin, isAuthor, catchAsync(campgrounds.deleteCampground))
 
-router.get('/:id/edit', checkLogin, isAuthor, catchAsync(campgrounds.viewEditCampground));
 
 
 module.exports = router;
