@@ -11,7 +11,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "cloudinary": "^2.7.0",
+    "@maptiler/client": "^1.8.1",
+    "@maptiler/sdk": "^3.4.1",
+    "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
