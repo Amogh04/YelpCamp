@@ -15,7 +15,9 @@ const User = require('./models/user');
 const ExpressError = require('./utilities/ExpressError');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
-const userRoutes = require('./routes/user')
+const userRoutes = require('./routes/user');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 mongoose.connect('mongodb://localhost:27017/yelpcamp');
 mongoose.connection.on("error", console.error.bind(console, "connection error:"));
@@ -28,28 +30,79 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionConfig = {
+	name: 'sessId',
 	secret: 'thisshouldbeabettersecret',
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
 		httpOnly: true,
+		// secure: true,
 		expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
 		maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
 	}
 }
-app.use(session(sessionConfig));
-app.use(flash());
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()))    
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
 app.engine('ejs',ejsMate);
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 
+
+app.use(session(sessionConfig));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(mongoSanitize({
+	replaceWith:'_'
+}));
+app.use(helmet());
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+    "https://cdn.maptiler.com/"
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+    "https://cdn.maptiler.com/"
+];
+const connectSrcUrls = [
+    "https://api.maptiler.com/"
+];
+const fontSrcUrls = [];
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            childSrc: ["blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+				"https://picsum.photos/",
+				"https://fastly.picsum.photos/",
+                "https://res.cloudinary.com/dddu1othk/", //SHOULD MATCH THE CLOUDINARY ACCOUNT ENVIRONMENT NAME! 
+                "https://images.unsplash.com",
+				"https://api.maptiler.com/"
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+
+
+passport.use(new LocalStrategy(User.authenticate())); 
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 //Middleware for flash messages
