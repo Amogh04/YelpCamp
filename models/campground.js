@@ -33,7 +33,8 @@ const CampgroundSchema = new Schema({
             required: true
         }
     }
-});
+}, {toJSON: {virtuals:true} } );
+// Because Mongoose does not include virtuals when converting to JSON (needed for cluster Map)
 
 CampgroundSchema.post('findOneAndDelete', async function(doc) {
 	if(doc) {
@@ -46,6 +47,11 @@ CampgroundSchema.post('findOneAndDelete', async function(doc) {
 		console.log('No document found to delete reviews for.');
 	}
 });
+
+// For Maptiler Cluster Map Popup
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
+	return `<b><a href="/campgrounds/${this._id}">${this.title}</a></b>, <br>${this.location}`
+})
 
 module.exports = mongoose.model('Campground',CampgroundSchema);
 	 
