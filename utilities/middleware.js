@@ -11,6 +11,7 @@ const checkLogin = (req, res, next) => {
         req.flash('error', 'You must be Signed in to perform that action!');
         return res.redirect(`/u/login`);
     }
+    console.log('body at checklogin middleware: ', req.body)
     next();
 }
 const redirectTo = (req, res, next) => {

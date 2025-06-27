@@ -11,7 +11,7 @@ const upload = multer({storage});
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(checkLogin, validateCampground, upload.array('image'), catchAsync(campgrounds.createCampground))
+    .post(checkLogin, upload.array('image'), validateCampground,  catchAsync(campgrounds.createCampground))
 
 router.get('/new', checkLogin, (req,res) => res.render('campgrounds/new'));
 router.get('/:id/edit', checkLogin, isAuthor, catchAsync(campgrounds.viewEditCampground));

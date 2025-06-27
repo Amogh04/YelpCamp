@@ -33,7 +33,7 @@ const campgroundSchema = Joi.object({			//JOI schema to Validate campgrounds fro
 });
 
 module.exports  = (req,res,next) => {
-    console.log('req.body.campground = ',req.body.campground);
+    console.log('req.body.campground = ',req.body);
     const {error} = campgroundSchema.validate(req.body);
     if(error){
         const msg = error.details.map(x => x.message).join(',');

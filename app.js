@@ -18,8 +18,11 @@ const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelpcamp';
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 
-mongoose.connect('mongodb://localhost:27017/yelpcamp');
+mongoose.connect(dbUrl);
 mongoose.connection.on("error", console.error.bind(console, "connection error:"));
 mongoose.connection.once("open", () => {
 	console.log ("Database connected");
@@ -29,15 +32,29 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60, //seconds!
+    crypto: {
+        secret
+    }
+});
+
+store.on("err", (err) => {
+	console.log("Error:", err);
+})
+
 const sessionConfig = {
+	store,
 	name: 'sessId',
-	secret: 'thisshouldbeabettersecret',
+	secret,
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
 		httpOnly: true,
 		// secure: true,
-		expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+		expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week (milliseconds!)
 		maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
 	}
 }
