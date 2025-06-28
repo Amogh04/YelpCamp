@@ -3,6 +3,11 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;		//Shortcut to call it Schema instead of mongoose.Schema 
 
 const userSchema = new Schema({
+    name: {
+      type: String,
+      required: true,
+      minlength: 3
+    },
     email: {
         type: String,
         required: true,

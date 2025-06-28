@@ -37,7 +37,7 @@ module.exports.logout = (req, res, next) => {
 }
 
 module.exports.changePwd = async (req, res, next) => {
-    const user = await User.findOne({id:res.locals.currentUser._id});
+    const user = await User.findOne({_id:res.locals.currentUser._id});
     user.changePassword(req.body.currPwd, req.body.newPwd, (err, user, passwordErr) => {
         if(passwordErr || err){
             req.flash('error', (passwordErr || err).message);
@@ -67,4 +67,31 @@ module.exports.deleteAcc = async (req, res, next) => {
             res.redirect('/u/settings');
         }
     });
+}
+
+module.exports.editUser = async (req, res, next) => {
+    const {name, email, username} = req.body;
+    console.log('req.body: ', req.body);
+    const oldUsername = await User.find({username});
+    const oldEmail = await User.find({email});
+    if(oldUsername.length){
+        req.flash('error', 'This username is taken! Please try another');
+        return res.redirect('/u/settings');
+    }
+    else if(oldEmail.length){
+        req.flash('error', 'A user with this Email address already exists!');
+        return res.redirect('/u/settings');
+    }
+    else{
+        const user = await User.findById(res.locals.currentUser._id);
+        user.name = name;
+        user.email = email;
+        user.username = username;
+        await user.save();
+        req.login(user, function(err) {
+            if (err) return next(err);
+            req.flash('success', 'Changes Saved!');
+            res.redirect('/u/settings');
+        });
+    }
 }

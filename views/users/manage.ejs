@@ -1,0 +1,41 @@
+<% layout('layouts/settings.ejs') %>
+
+<div class="d-flex justify-content-start">
+    <nav class="nav flex-column sidebar text-white p-3 d-flex justify-content-start gap-4">
+        <a class="nav-link text-white mt-5" href="/u/settings">Profile</a>
+        <a class="nav-link text-white" href="/u/settings/manage">Manage Account</a>
+    </nav>
+
+    <div class="mt-5 ml-20">
+        <%-include('../partials/flash')%>
+        <div>
+            <h1>Change Password</h1>
+            <form action="/u/changePwd" method="POST" class="needs-validation" novalidate>
+                <div>
+                    <label class="form-label" for="currPwd">Enter Current Password</label>
+                    <input class="form-control w-120" type="password" name="currPwd" id="currPwd" required minlength="8">
+                </div>
+                <div class="mt-3">
+                    <label class="form-label" for="newPwd">Enter New Password</label>
+                    <input class="form-control w-120" type="password" name="newPwd" id="newPwd" required minlength="8">
+                </div>
+                <button class="btn btn-lg btn-success mt-3">Submit</button>
+            </form>
+        </div>
+
+        <div class="mt-10">
+            <h1>Delete Account</h1>
+            <form action="/u?_method=DELETE" method="POST" class="needs-validation" novalidate>
+                <div>
+                    <label class="form-label" for="currPwd">Enter your Password</label>
+                    <input class="form-control w-120" type="password" name="currPwd" id="currPwd" required minlength="8">
+                </div>
+                <div class="mt-3">
+                    <label class="form-label" for="confirm">Type <b>"Delete this account"</b> below:</label>
+                    <input class="form-control w-120" type="text" name="confirm" id="confirm" required>
+                </div>
+                <button class="btn btn-danger btn-lg mt-3">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>

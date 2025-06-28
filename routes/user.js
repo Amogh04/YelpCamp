@@ -17,8 +17,10 @@ router.route('/login')
     .post(redirectTo, passportMiddleware, users.login)
 router.get('/logout', users.logout)
 
-router.get('/settings', checkLogin, (req, res) => (res.render('users/settings')));
+router.get('/settings/manage', checkLogin, (req, res) => (res.render('users/manage')));
+router.get('/settings', checkLogin, (req, res) => (res.render('users/profile')));
 router.post('/changePwd', checkLogin, users.changePwd);
+router.post('/editUser', checkLogin, users.editUser);
 router.delete('/', checkLogin, users.deleteAcc);
 
 module.exports = router;
