@@ -2,21 +2,59 @@ const Campground = require('../models/campground');
 const User = require('../models/user');
 const Review = require('../models/review');
 
+const MagicLinkStrategy = require('passport-magic-link').Strategy;
+const sendgrid = require('@sendgrid/mail');
+sendgrid.setApiKey(process.env['SENDGRID_API_KEY']);
+const randomstring = require('randomstring');
+
+async function sendEmail(to, otp) {
+	const msgData = {
+		to,
+		from: process.env.EMAIL,
+		subject: 'OTP Verification for YelpCamp',
+		html: `Your OTP is: <h1> ${otp} </h1>`
+	};
+	try{
+		await sendgrid.send(msgData);
+	}
+	catch(e){
+		console.log('error: ', e);
+	}
+}
+
+module.exports.verifyEmail = async(req, res) => {
+    const {user} = req.body;
+    const email = user.email;
+    const otp = randomstring.generate(6);
+    sendEmail(email, otp);
+    req.session.otp = otp;
+    req.session.user = user;
+    res.render('users/register', {sendOTP:true});
+}
+
+
 module.exports.registerNewUser = async (req,res) => {
-    let newUser;
-    try{
-        const {username, email, password} = req.body.user;
-        const user = new User({email, username});
-        newUser = await User.register(user, password);
-        await newUser.save();
-        req.login(newUser, err => {
-            if(err) return next(err);
-            req.flash('success', 'Welcome to YelpCamp. You are successfully registered!');
-            res.redirect('/campgrounds');
-        });
+    if(req.body && req.body.otp==`${req.session.otp}`){
+        let newUser;
+        try{
+            const {username, email, password} = req.session.user;
+            const user = new User({email, username});
+            newUser = await User.register(user, password);
+            const resp = await newUser.save();
+            req.login(newUser, err => {
+                if(err) return next(err);
+                req.session.newUser = null;
+                req.flash('success', 'Welcome to YelpCamp. You are successfully registered!');
+                return res.redirect('/campgrounds');
+            });
+        }
+        catch(err){
+            req.flash('error', err.message);
+            return res.redirect('/u/register');
+        }
     }
-    catch(err){
-        req.flash('error', err.message);
+    else{
+        req.flash('error', 'Invalid OTP entered! Try again');
         return res.redirect('/u/register');
     }
 }
@@ -64,7 +102,7 @@ module.exports.deleteAcc = async (req, res, next) => {
         }
         else{
             req.flash('error', 'Unable to Authenticate. Please try again!');
-            res.redirect('/u/settings');
+            res.redirect('/u/settings/manage');
         }
     });
 }

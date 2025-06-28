@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;		//Shortcut to call it Schema instead of mongoos
 const userSchema = new Schema({
     name: {
       type: String,
-      required: true,
       minlength: 3
     },
     email: {

@@ -5,9 +5,13 @@ const passport = require('passport');
 const {checkLogin, redirectTo} = require('../utilities/middleware');
 const users = require('../controllers/users')
 
+
+
 router.route('/register')
-    .get((req, res) => res.render('users/register'))
-    .post(catchAsync(users.registerNewUser))
+    .get((req, res) => res.render('users/register', {sendOTP:false}))
+    .post(catchAsync(users.verifyEmail))
+    
+router.post('/register/verify', catchAsync(users.registerNewUser));
 
 // This middleware is what Logs in the user!
 const passportMiddleware = passport.authenticate('local', {failureFlash:true, failureRedirect:'/u/login'})
