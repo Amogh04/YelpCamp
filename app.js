@@ -153,3 +153,5 @@ app.use((err,req,res,next) => {
 app.listen(port,()=>{
 	console.log('Listening on Port ', port);
 });
+
+module.exports = app;
