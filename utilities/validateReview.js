@@ -24,7 +24,7 @@ const extension = (joi) => ({
 
 const Joi = BaseJoi.extend(extension)
 
-reviewSchema = Joi.object({			//JOI schema to Validate campgrounds from server side
+const reviewSchema = Joi.object({			//JOI schema to Validate campgrounds from server side
 	review: Joi.object({
 		rating: Joi.number().required().min(1).max(5),
 		body: Joi.string().required().escapeHTML()
