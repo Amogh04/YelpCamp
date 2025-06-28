@@ -1,4 +1,14 @@
-<nav  class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<% layout('layouts/boilerplate.ejs') %>
+
+
+<div class="d-flex">
+    <nav class="nav flex-column bg-dark text-white p-3" style="width: 250px; height: 100vh;">
+      <a class="nav-link text-white" href="#">Home</a>
+      <a class="nav-link text-white" href="#">Profile</a>
+      <a class="nav-link text-white" href="#">Messages</a>
+      <a class="nav-link text-white" href="#">Settings</a>
+    </nav>
+    <nav  class="nav nav-dark bg-dark flex-column">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="/">YelpCamp</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
@@ -30,3 +40,27 @@
 	</div>
 </nav>
 	
+</div>
+
+
+
+
+
+<h1>Change Password</h1>
+
+<form action="/u/changePwd" method="POST">
+    <label for="currPwd">Enter Current Password</label>
+    <input type="password" name="currPwd" id="currPwd">
+    <label for="newPwd">Enter New Password</label>
+    <input type="password" name="newPwd" id="newPwd">
+    <button>Submit</button>
+</form>
+
+<h1>Delete Account</h1>
+<form action="/u?_method=DELETE" method="POST">
+    <label for="currPwd">Enter Password</label>
+    <input type="password" name="currPwd" id="currPwd">
+    <label for="confirm">Type "Delete this account" below:</label>
+    <input type="text" name="confirm" id="confirm">
+    <button class="btn btn-danger btn-lg">Delete</button>
+</form>

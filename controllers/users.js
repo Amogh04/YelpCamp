@@ -1,4 +1,6 @@
+const Campground = require('../models/campground');
 const User = require('../models/user');
+const Review = require('../models/review');
 
 module.exports.registerNewUser = async (req,res) => {
     let newUser;
@@ -31,5 +33,38 @@ module.exports.logout = (req, res, next) => {
             return next(err);
         req.flash('success', 'GoodBye!');
         res.redirect('/');
+    });
+}
+
+module.exports.changePwd = async (req, res, next) => {
+    const user = await User.findOne({id:res.locals.currentUser._id});
+    user.changePassword(req.body.currPwd, req.body.newPwd, (err, user, passwordErr) => {
+        if(passwordErr || err){
+            req.flash('error', (passwordErr || err).message);
+            return res.redirect('/u/settings');
+        }
+        else{
+            req.flash('success', 'Password Changed Successfully');
+            return res.redirect('/u/settings');
+        }
+    })
+}
+
+module.exports.deleteAcc = async (req, res, next) => {
+    const {currPwd, confirm} = req.body;
+    const id = res.locals.currentUser._id;
+    const user = await User.findById(id);
+    user.authenticate(currPwd, async (err, authenticatedUser, error) => {
+        if(authenticatedUser && confirm==="Delete this account"){
+            await Review.deleteMany({_id: {$in: user.reviews}});
+            await Campground.deleteMany({_id: {$in: user.campgrounds}});
+            await user.deleteOne();
+            req.flash('success', 'Successfully deleted the Account');
+            res.redirect('/');
+        }
+        else{
+            req.flash('error', 'Unable to Authenticate. Please try again!');
+            res.redirect('/u/settings');
+        }
     });
 }

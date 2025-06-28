@@ -15,7 +15,10 @@ const passportMiddleware = passport.authenticate('local', {failureFlash:true, fa
 router.route('/login')
     .get((req, res) => res.render('users/login'))
     .post(redirectTo, passportMiddleware, users.login)
-
 router.get('/logout', users.logout)
+
+router.get('/settings', checkLogin, (req, res) => (res.render('users/settings')));
+router.post('/changePwd', checkLogin, users.changePwd);
+router.delete('/', checkLogin, users.deleteAcc);
 
 module.exports = router;

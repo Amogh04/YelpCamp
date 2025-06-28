@@ -7,7 +7,15 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    campgrounds: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Campground'
+	}],
+    reviews: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Review'
+	}]
 });
 
 userSchema.plugin(passportLocalMongoose)
