@@ -136,7 +136,6 @@ module.exports.editUser = async (req, res, next) => {
 
 module.exports.forgotUsername = async (req, res, next) => {
     const login = req.body.login;
-    // const user = await User.findOne({email});
     const user = await User.findOne({$or: [{email:login}, {username:login}]});
     if(!user){
         req.flash('error', 'No user exists with this Email!');
