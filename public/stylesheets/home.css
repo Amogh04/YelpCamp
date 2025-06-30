@@ -11,9 +11,16 @@ body {
 
     margin:0em;
     width: 100%;
-    transition: 200ms all;
-    /* opacity: 0; */
-    transform: translateX(-100em);
+    animation: slideIn 0.2s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 .cover-container {
   max-width: 60vw;

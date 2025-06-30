@@ -22,15 +22,16 @@ router.route('/login')
 router.get('/logout', users.logout)
 
 router.get('/settings/manage', checkLogin, (req, res) => (res.render('users/manage')));
-router.get('/settings', checkLogin, (req, res) => (res.render('users/profile')));
+
+router.post('/settings/editEmail', checkLogin, users.changeEmail);
+router.get('/settings', checkLogin, (req, res) => (res.render('users/profile', {sendOTP:false})));
 router.post('/changePwd', checkLogin, users.changePwd);
 router.post('/editUser', checkLogin, users.editUser);
 router.delete('/', checkLogin, users.deleteAcc);
 
 router.route('/forgot')
-    .get((req, res) => (res.render('users/forgot')))
+    .get((req, res) => (res.render('users/forgot', {sendOTP:false})))
     .post(users.forgotUsername);
-
-router.post('/updatePwd', users.updatePwd)
+router.post('/forgot/updatePwd', users.updatePwd);
 
 module.exports = router;

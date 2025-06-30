@@ -1,11 +1,10 @@
 const oldForm = document.querySelector('form');
 oldForm.remove();
 
-
-const card = document.querySelector('.card-body')
+const card = document.querySelector('.card');
 const form = document.createElement('form');
 form.setAttribute('method', 'POST');
-form.setAttribute('action', '/u/register/verify');
+form.setAttribute('action', '/u/settings/editEmail');
 form.setAttribute('id', 'otpForm');
 
 const label = document.createElement('label');

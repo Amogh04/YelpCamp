@@ -1,18 +1,19 @@
 const Campground = require('../models/campground');
 const User = require('../models/user');
 const Review = require('../models/review');
+const { cloudinary } = require('../cloudinary');
 
 const MagicLinkStrategy = require('passport-magic-link').Strategy;
 const sendgrid = require('@sendgrid/mail');
 sendgrid.setApiKey(process.env['SENDGRID_API_KEY']);
 const randomstring = require('randomstring');
 
-async function sendEmail(to, otp) {
+async function sendEmail(to, msg) {
 	const msgData = {
 		to,
 		from: process.env.EMAIL,
 		subject: 'OTP Verification for YelpCamp',
-		html: `Your OTP is: <h1> ${otp} </h1>`
+		html: msg
 	};
 	try{
 		await sendgrid.send(msgData);
@@ -26,7 +27,8 @@ module.exports.verifyEmail = async(req, res) => {
     const {user} = req.body;
     const email = user.email;
     const otp = randomstring.generate(6);
-    sendEmail(email, otp);
+    const msg = 'Your OTP is ' + otp;
+    sendEmail(email, msg);
     req.session.otp = otp;
     req.session.user = user;
     res.render('users/register', {sendOTP:true});
@@ -94,17 +96,45 @@ module.exports.deleteAcc = async (req, res, next) => {
     const user = await User.findById(id);
     user.authenticate(currPwd, async (err, authenticatedUser, error) => {
         if(authenticatedUser && confirm==="Delete this account"){
+            const camps = await Campground.find({_id: {$in: user.campgrounds}});
+            for( let camp of camps){
+                for (let img of camp.images) {
+                    console.log(img, img.filename);
+                    await cloudinary.uploader.destroy(img.filename);
+                }
+            }
             await Review.deleteMany({_id: {$in: user.reviews}});
             await Campground.deleteMany({_id: {$in: user.campgrounds}});
             await user.deleteOne();
             req.flash('success', 'Successfully deleted the Account');
-            res.redirect('/');
+            return res.redirect('/');
         }
         else{
             req.flash('error', 'Unable to Authenticate. Please try again!');
-            res.redirect('/u/settings/manage');
+            return res.redirect('/u/settings/manage');
         }
     });
+}
+
+module.exports.changeEmail = async (req, res, next) => {
+    const email = req.session.newEmail;
+    const user = await User.findById(req.user._id);
+    if(`${req.body.otp}`!==req.session.otp){
+        req.flash('error', 'Invalid OTP Entered. Sent again!');
+        res.locals.error = req.flash('error');
+        sendOTP(req, user);   
+        return res.render('users/profile', {sendOTP:true});
+    }
+    user.email = email;
+    user.save();
+    req.login(user, function(err) {
+        if (err) return next(err);
+    });
+    req.flash('success', 'Email Changed Successfully!');
+    req.session.otp = null;
+    req.session.newEmail = null;
+    res.locals.sendOTP = false;
+    return res.redirect('/u/settings');
 }
 
 module.exports.editUser = async (req, res, next) => {
@@ -112,26 +142,45 @@ module.exports.editUser = async (req, res, next) => {
     console.log('req.body: ', req.body);
     const oldUsername = await User.find({username});
     const oldEmail = await User.find({email});
-    if(oldUsername.length){
+    if(oldUsername.length && oldUsername[0]._id.toString()!==req.user._id.toString()){
         req.flash('error', 'This username is taken! Please try another');
         return res.redirect('/u/settings');
     }
-    else if(oldEmail.length){
+    else if(oldEmail.length && oldEmail[0]._id.toString()!==req.user._id.toString()){
         req.flash('error', 'A user with this Email address already exists!');
         return res.redirect('/u/settings');
     }
     else{
-        const user = await User.findById(res.locals.currentUser._id);
+        const user = await User.findById(req.user._id);
         user.name = name;
-        user.email = email;
         user.username = username;
         await user.save();
         req.login(user, function(err) {
             if (err) return next(err);
-            req.flash('success', 'Changes Saved!');
-            res.redirect('/u/settings');
         });
+        if(user.email!==email){
+            const otp = randomstring.generate(6);
+            const msg = '<h3>Your OTP: ' + otp + '<br>Username: ' + username + '</h3'; 
+            sendEmail(email, msg);
+            req.session.otp = otp;
+            req.session.newEmail = email;
+            res.locals.sendOTP = true;
+            return res.render('users/profile', {sendOTP:true});
+        }
+        else{
+            req.flash('success', 'Changes Saved!');
+            return res.redirect('/u/settings');
+        }
+        // user.email = email;
     }
+}
+
+const sendOTP = (req, user, username=null) => {
+    const otp = randomstring.generate(6);
+    const msg = '<h3>Your OTP: ' + otp + '<br>Username: ' + username + '</h3'; 
+    sendEmail(user.email, msg);
+    req.session.otp = otp;
+    req.session.user = user;
 }
 
 module.exports.forgotUsername = async (req, res, next) => {
@@ -141,21 +190,21 @@ module.exports.forgotUsername = async (req, res, next) => {
         req.flash('error', 'No user exists with this Email!');
         return res.redirect('/u/forgot')
     }
-    const otp = randomstring.generate(6);
-    sendEmail(user.email, otp);
     req.flash('success', 'OTP has been sent to your Email');
-    req.session.otp = otp;
-    req.session.user = user;
-    return res.render('users/changePwd', {username:user.username});
+    res.locals.success = req.flash('success');
+    sendOTP(req, user, user.username);   
+    return res.render('users/forgot', {sendOTP:true});
 }
 
 module.exports.updatePwd = async (req, res) => {
-    if(`${req.body.otp}`!==req.session.otp){
-        req.flash('error', 'Invalid OTP Entered');
-        return res.redirect('/u/forgot');
-    }
     const user = await User.findById(req.session.user._id);
-    user.setPassword(req.body.password, (err, user, passwordErr) => {
+    if(`${req.body.otp}`!==req.session.otp){
+        req.flash('error', 'Invalid OTP Entered. Sent again!');
+        res.locals.error = req.flash('error');
+        sendOTP(req, user);   
+        return res.render('users/forgot', {sendOTP:true, username:req.session.user.username});
+    }
+    user.setPassword(req.body.pwd, (err, user, passwordErr) => {
         if(passwordErr || err){
             req.flash('error', (passwordErr || err).message);
             return res.redirect('/u/forgot');

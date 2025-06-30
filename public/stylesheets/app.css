@@ -1,9 +1,18 @@
 body{
     margin:0em;
     width: 100%;
-    transition: 200ms all;
-    transform: translateX(-100em);
+    animation: slideIn 0.2s ease forwards;
 }
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 .btn-custom {
     color: #000a;
     /* background-color: #0e8b86; */
@@ -38,6 +47,10 @@ body{
     background-color: #004147;
     font-size: 1.5em;
     width: 10em;
+    /* height:100%; */
+}
+.card-custom {
+    height: 35em;
 }
 
 .rale {
@@ -58,13 +71,11 @@ body{
 .w-120{
     width:120%;
 }
-
 .shadow-80{
     box-shadow: 0em 0em 2em 0.1em #80808043;
 }
 
 .wrap {
     width: 25em;
-    /* height: 400px;  */
     overflow: hidden;
 }

@@ -8,8 +8,9 @@ const titles = require('./seedHelpers');
 const maptilerClient = require("@maptiler/client");
 require('dotenv').config();
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelpcamp';
 
-mongoose.connect('mongodb://localhost:27017/yelpcamp');
+mongoose.connect(dbUrl);
 mongoose.connection.on("error", console.error.bind(console, "connection error:"));
 mongoose.connection.once("open", () => {
 	console.log ("Database connected");

@@ -1,42 +1,28 @@
-<% layout('layouts/boilerplate.ejs') %>
-
-<div class="container-fluid d-flex justify-content-center align-items-center my-5 w-75">
-	<div class="row">
-		<div class="col-md-6 offset-md-3">
-			<div class="card shadow">
-				<img crossorigin="anonymous" src="https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="LoginImage" class="card-img-top">
-				<div class="card-body">
-					<h2 class="card-title">Login</h2>
-					<form action="/u/login" method="POST" class="needs-validation" novalidate>
-						<div class="mb-3">
-							<label class="form-label" for="usr">Username/Email</label>
-							<input autofocus class="form-control" type="text" name="login" id="usr" required>
-							<div class="valid-feedback">
-								Looks good!
-							</div>
-							<div class="invalid-feedback">
-								Please provide a valid Username/Email.
-							</div>
-						</div>
-						<div class="mb-3">
-							<label class="form-label" for="password">Password</label>
-							<input class="form-control" type="password" name="password" id="password" required minlength="8">
-							<div class="valid-feedback">
-								Looks good!
-							</div>
-							<div class="invalid-feedback">
-								Please provide a valid Password.
-							</div>
-							<div class="mt-3 d-grid">
-								<button class="btn btn-success">Login</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
+<% layout('layouts/authCard.ejs') %>
+<p class="card-title display-6 fs-3">Login</p>
+<form action="/u/login" method="POST" class="needs-validation" novalidate>
+	<div class="mb-3">
+		<label class="form-label" for="usr">Username/Email</label>
+		<input autofocus class="form-control" type="text" name="login" id="usr" required>
+		<div class="valid-feedback">
+			Looks good!
+		</div>
+		<div class="invalid-feedback">
+			Please provide a valid Username/Email.
 		</div>
 	</div>
-</div>
-
-
+	<div class="mb-3">
+		<label class="form-label" for="password">Password</label>
+		<input class="form-control" type="password" name="password" id="password" required minlength="8">
+		<div class="valid-feedback">
+			Looks good!
+		</div>
+		<div class="invalid-feedback">
+			Please provide a valid Password.
+		</div>
+		<div class="mt-3 d-grid">
+			<button class="btn btn-success">Login</button>
+		</div>
+	</div>
+</form>
 

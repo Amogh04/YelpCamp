@@ -1,22 +1,22 @@
 <% layout('layouts/settings.ejs') %>
 
 
-<div class="card shadow-80 h-100 w-50 ml-20 p-5 my-5">
+<div class="card card-custom shadow-80 mh-25 w-50 ml-20 p-5 my-5">
     <%-include('../partials/flash')%>
 	<div class="card-body" >
 		<h2 class="card-title">User Details</h2>
 		<form action="/u/editUser" method="POST" class="needs-validation" novalidate>
             <div class="mt-4">
                 <label class="form-label" for="user[name]">Name</label>
-                <input class="form-control" type="text" name="name" id="name" required minlength="3">
+                <input class="form-control" type="text" name="name" id="name" value="<%=currentUser.name%>">
             </div>
             <div class="mt-4">
-                <label class="form-label" for="user[email]">Email</label>
-                <input class="form-control" type="email" name="email" id="email" required>
+                <label class="form-label" for="user[email]">Email (OTP verification required)</label>
+                <input class="form-control" type="email" name="email" id="email" required value="<%=currentUser.email%>">
             </div>
             <div class="mt-4">
                 <label class="form-label" for="user[username]">Username</label>
-                <input class="form-control" type="text" name="username" id="username" required>
+                <input class="form-control" type="text" name="username" id="username" required value="<%=currentUser.username%>">
             </div>
             <div class="d-grid">
                 <button class="btn btn-lg btn-success mt-4">Save</button>
@@ -24,3 +24,6 @@
 	    </form>
 	</div>
 </div>
+<%if(sendOTP){%>
+    <script src="/scripts/emailEditForm.js"></script>
+<%}%>

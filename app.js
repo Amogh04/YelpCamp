@@ -140,7 +140,6 @@ passport.use(new LocalStrategy({ usernameField: 'login' }, async (login, passwor
 }));
 
 
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
