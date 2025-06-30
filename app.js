@@ -119,11 +119,31 @@ app.use(
 );
 
 
-passport.use(new LocalStrategy(User.authenticate())); 
+// passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy({ usernameField: 'login' }, async (login, password, done) => {
+  try {
+
+    const user = await User.findOne({
+      $or: [{ username: login }, { email: login }]
+    });
+    if (!user) {
+      return done(null, false, { message: 'User not found' });
+    }
+    // Use passport-local-mongoose's authenticate method
+    user.authenticate(password, (err, authenticatedUser, error) => {
+      if (err) return done(err);
+      if (!authenticatedUser) return done(null, false, { message: error.message });
+      return done(null, authenticatedUser);
+    });
+  } catch (err) {
+    return done(err);
+  }
+}));
+
+
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-
 
 
 //Middleware for flash messages

@@ -1,19 +1,13 @@
 <% layout('/layouts/boilerplate.ejs') %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
-<div class="row">
-	<div class="col-6">
+<div class="row mt-5">
+	<div class="col-6 wrap ml-10">
 		<%if(camp.images.length>0){%>
 			<div id="carouselControls" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner">
 					<%camp.images.forEach((img, i) => {%>		
 						<div class="carousel-item <%=!i?`active`:``%>">
 							<img crossorigin="anonymous" src="<%=img.url%>" class="d-block w-100" alt="">
-							<%if(currentUser && camp.author._id.equals(currentUser._id)){%>
-								<form action="/campgrounds/<%=camp._id%>/<%=img._id%>?_method=DELETE" method="POST">
-									<input type="text" value="<%=img.filename%>" name="filename" hidden>
-									<button class="btn btn-danger"  style="width:100%;">Delete</button>
-								</form>
-							<%}%>
 						</div>
 					<%})%>
 				</div>
@@ -41,7 +35,7 @@
 			</ul>
 			<%if(currentUser && camp.author._id.equals(currentUser._id)){%>
 			<div class="card-body">
-				<a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-primary text-light my-2">Edit this Campground</a>
+				<a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-primary my-2">Edit this Campground</a>
 				<form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
 					<button class="btn btn-danger my-2">Delete this Campground</button>
 				</form>
@@ -53,7 +47,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-6">
+	<div class="col-6 ml-10">
 		<div class="mb-5 small-map" id='map'>
 			<select class="mapstyles-select">
 				<optgroup label="Navigation and city exploration">

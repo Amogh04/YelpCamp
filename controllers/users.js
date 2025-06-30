@@ -85,7 +85,7 @@ module.exports.changePwd = async (req, res, next) => {
             req.flash('success', 'Password Changed Successfully');
             return res.redirect('/u/settings');
         }
-    })
+    });
 }
 
 module.exports.deleteAcc = async (req, res, next) => {
@@ -132,4 +132,40 @@ module.exports.editUser = async (req, res, next) => {
             res.redirect('/u/settings');
         });
     }
+}
+
+module.exports.forgotUsername = async (req, res, next) => {
+    const login = req.body.login;
+    // const user = await User.findOne({email});
+    const user = await User.findOne({$or: [{email:login}, {username:login}]});
+    if(!user){
+        req.flash('error', 'No user exists with this Email!');
+        return res.redirect('/u/forgot')
+    }
+    const otp = randomstring.generate(6);
+    sendEmail(user.email, otp);
+    req.flash('success', 'OTP has been sent to your Email');
+    req.session.otp = otp;
+    req.session.user = user;
+    return res.render('users/changePwd', {username:user.username});
+}
+
+module.exports.updatePwd = async (req, res) => {
+    if(`${req.body.otp}`!==req.session.otp){
+        req.flash('error', 'Invalid OTP Entered');
+        return res.redirect('/u/forgot');
+    }
+    const user = await User.findById(req.session.user._id);
+    user.setPassword(req.body.password, (err, user, passwordErr) => {
+        if(passwordErr || err){
+            req.flash('error', (passwordErr || err).message);
+            return res.redirect('/u/forgot');
+        }
+        else{
+            user.save();
+            req.flash('success', 'Password Changed Successfully');
+            return res.redirect('/');
+        }
+    })
+
 }

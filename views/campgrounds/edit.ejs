@@ -40,6 +40,16 @@
 					<input type="text" class="form-control" id="price" placeholder="0.00" name="campground[price]" value="<%=camp.price%>" required>
 				</div>
 			</div>
+			<div class="mb-3">
+                <% camp.images.forEach(function(img, i) {  %>
+
+                <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
+                <div class="form-check-inline">
+                    <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                </div>
+                <label for="image-<%=i%>">Delete?</label>
+                <% })%>
+            </div>
 			<div class="my-3">
 				<button class="btn btn-primary  text-light">Update</button>
 			</div>

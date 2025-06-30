@@ -1,14 +1,29 @@
 body{
     margin:0em;
+    width: 100%;
+    transition: 200ms all;
+    transform: translateX(-100em);
+}
+.btn-custom {
+    color: #000a;
+    /* background-color: #0e8b86; */
+    background-color: #fff;
+    border-color: #000a;
+}
+.btn-custom:hover{
+    color:#fff;
+    background-color: #0e8b86;
+    border-color: #118d59;
 }
 .cluster-map{
     width:100%;
     height:30em;
+    margin:0em;
 }
 
 .small-map{
     width:100%;
-    height:20em;
+    height:30em;
 }
 
 .mapstyles-select {
@@ -23,11 +38,19 @@ body{
     background-color: #004147;
     font-size: 1.5em;
     width: 10em;
-    height:100vh;
 }
+
+.rale {
+  font-family: "Raleway";
+  font-weight: 500;
+}
+
 
 .mt-10{
     margin-top:6rem;
+}
+.ml-10{
+    margin-left:4rem;
 }
 .ml-20{
     margin-left:12rem;
@@ -38,4 +61,10 @@ body{
 
 .shadow-80{
     box-shadow: 0em 0em 2em 0.1em #80808043;
+}
+
+.wrap {
+    width: 25em;
+    /* height: 400px;  */
+    overflow: hidden;
 }

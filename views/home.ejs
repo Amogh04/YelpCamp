@@ -14,12 +14,13 @@
                 <h3 class="float-md-left mb-0">YelpCamp</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-right">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="/campgrounds">Campgrounds</a>
+                    <a class="nav-link fadeAnimate" href="/campgrounds">Campgrounds</a>
                     <% if(!currentUser) { %>
-                    <a class="nav-link" href="/u/login">Login</a>
-                    <a class="nav-link" href="/u/register">Register</a>
+                    <a class="nav-link fadeAnimate" href="/u/login">Login</a>
+                    <a class="nav-link fadeAnimate" href="/u/register">Register</a>
+                    <a class="nav-link fadeAnimate" href="/u/forgot">Forgot Credentials</a>
                     <% } else { %>
-                    <a class="nav-link" href="/u/logout">Logout</a>
+                    <a class="nav-link fadeAnimate" href="/u/logout">Logout</a>
                     <% } %>
                 </nav>
             </div>
@@ -28,7 +29,7 @@
             <h1>YelpCamp</h1>
             <p class="lead"> Welcome to YelpCamp! <br> Jump right in and explore our many campgrounds. <br>
                 Feel free to share some of your own and comment on others!</p>
-            <a href="/campgrounds" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">View
+            <a href="/campgrounds" class="fadeAnimate btn btn-lg btn-secondary font-weight-bold border-white bg-white">View
                 Campgrounds</a>
         </main>
 
@@ -37,5 +38,6 @@
         </footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/scripts/transition.js"></script>
 </body>
 </html>

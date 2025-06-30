@@ -27,4 +27,10 @@ router.post('/changePwd', checkLogin, users.changePwd);
 router.post('/editUser', checkLogin, users.editUser);
 router.delete('/', checkLogin, users.deleteAcc);
 
+router.route('/forgot')
+    .get((req, res) => (res.render('users/forgot')))
+    .post(users.forgotUsername);
+
+router.post('/updatePwd', users.updatePwd)
+
 module.exports = router;

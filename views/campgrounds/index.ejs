@@ -1,17 +1,17 @@
 <% layout('/layouts/boilerplate.ejs') %>
 <div id="map" class="cluster-map"></div>
-<h1>All Campgrounds</h1>
+<h1 class="text-center my-4 mt-5 text-decoration-underline display-5">All Campgrounds</h1>
 <%for(let i=campgrounds.length-1;i>=0;--i){%>
-<div class="card mb-3">
+<div class="card mb-5">
   <div class="row d-flex flex-row">
   	<div class="col-md-3">
   		<img crossorigin="anonymous" class="img-fluid" src="<%=campgrounds[i].images.length ? campgrounds[i].images[0].url : `https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`%>">
 	</div>
-  	<div class="col-md-6 card-body">
-	  	<h5 class="card-title"><%=campgrounds[i].title%></h5>
-	    <p class="card-text"><%=campgrounds[i].description%></p>
-	    <small class="text-muted"><%=campgrounds[i].location%></small>
-	    <a href="/campgrounds/<%=campgrounds[i]._id%>" class="btn btn-primary">View <%=campgrounds[i].title%></a>
+  	<div class="col-md-6 card-body d-flex flex-column align-items-center justify-content-center gap-1">
+	  	<h2 class="card-title rale fs-1"><%=campgrounds[i].title%></h2>
+	    <p class="card-text lead px-5"><%=campgrounds[i].description%></p>
+	    <small class="text-muted fs-5 rale"><%=campgrounds[i].location%></small>
+	    <a href="/campgrounds/<%=campgrounds[i]._id%>"  class="fadeAnimate mt-5 btn btn-custom fs-5 px-4 py-2">View <%=campgrounds[i].title%></a>
 	</div>
   </div>		
 </div>
@@ -23,3 +23,4 @@
 </script>
 <script crossorigin="anonymous" src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.min.js"></script>
 <script src="/scripts/clusterMap.js"></script>
+

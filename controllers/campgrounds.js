@@ -40,6 +40,12 @@ module.exports.editCampground = async (req,res) => {
     const geoData = await maptilerClient.geocoding.forward(req.body.campground.location, { limit: 1 });
     camp.geometry = geoData.features[0].geometry;
     await camp.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await camp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+    }
     req.flash('success', 'Successfully updated the Campground!');
     res.redirect(`/campgrounds/${camp._id}`);
 }
@@ -70,12 +76,4 @@ module.exports.deleteCampground = async (req,res) => {
 	await camp.deleteOne();
     req.flash('success', 'Successfully deleted the Campground!');
 	res.redirect('/campgrounds');
-}
-
-module.exports.deleteImage = async (req, res) => {
-    const {id, imageId} = req.params;
-    const {filename} = req.body;
-    const camp = await Campground.findOneAndUpdate({_id:id}, {$pull: {images: {_id:imageId}}});
-    await cloudinary.uploader.destroy(filename);
-    res.redirect(`/campgrounds/${id}`);
 }

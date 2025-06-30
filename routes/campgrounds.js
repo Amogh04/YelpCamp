@@ -9,13 +9,13 @@ const multer = require('multer');
 const {storage} = require('../cloudinary/index');
 const upload = multer({storage});
 
+
 router.route('/')
     .get(catchAsync(campgrounds.index))
     .post(checkLogin, upload.array('image'), validateCampground,  catchAsync(campgrounds.createCampground))
 
 router.get('/new', checkLogin, (req,res) => res.render('campgrounds/new'));
 router.get('/:id/edit', checkLogin, isAuthor, catchAsync(campgrounds.viewEditCampground));
-router.delete('/:id/:imageId', checkLogin, isAuthor, catchAsync(campgrounds.deleteImage));
 
 router.route('/:id')
     .get(catchAsync(campgrounds.showCampground))

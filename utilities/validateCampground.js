@@ -29,7 +29,8 @@ const campgroundSchema = Joi.object({			//JOI schema to Validate campgrounds fro
 		price: Joi.number().required().min(0),
 		location: Joi.string().required().escapeHTML(),
 		description: Joi.string().required().escapeHTML()
-	}).required()
+	}).required(),
+    deleteImages: Joi.array()
 });
 
 module.exports  = (req,res,next) => {
