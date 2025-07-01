@@ -1,8 +1,8 @@
 <% layout('layouts/settings.ejs') %>
 
-<div class="my-5 ml-20 row">
+<div class="my-5 w-100">
     <%-include('../partials/flash')%>
-    <div class="">
+    <div class="d-flex justify-content-around">
         <div>
             <h1>Change Password</h1>
             <form action="/u/changePwd" method="POST" class="needs-validation" novalidate>
@@ -17,7 +17,7 @@
                 <button class="btn btn-lg btn-success mt-3">Submit</button>
             </form>
         </div>
-        <div class="mt-10">
+        <div>
             <h1>Delete Account</h1>
             <form action="/u?_method=DELETE" method="POST" class="needs-validation" novalidate>
                 <div>

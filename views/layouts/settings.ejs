@@ -4,22 +4,23 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>YelpCamp </title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<link crossorigin="anonymous" href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet">
+	<link href="/stylesheets/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+	<link href="/stylesheets/maptiler-sdk.css" rel="stylesheet" crossorigin="anonymous">
 	<link rel="stylesheet" href="/stylesheets/app.css">
 </head>
 <body class="d-flex flex-column vh-100">
+	
 	<%-include('../partials/navbar')%>
-	<main class="container m-0 p-0">
-		<div class="d-flex vh-100">
-			<nav class="nav flex-column sidebar text-white p-3 d-flex justify-content-start gap-4">
-				<a class="nav-link text-white mt-5 fadeAnimate" href="/u/settings">Profile</a>
-				<a class="nav-link text-white fadeAnimate" href="/u/settings/manage">Manage Account</a>
-			</nav>
+	<main class="d-flex vh-100">
+		<nav class="nav flex-column sidebar text-white p-3 d-flex justify-content-start gap-4">
+			<a class="nav-link text-white mt-5 fadeAnimate" href="/u/settings">Profile</a>
+			<a class="nav-link text-white fadeAnimate" href="/u/settings/manage">Manage Account</a>
+		</nav>
+		<div class="d-flex justify-content-center vw-100 mt-5">
 			<%- body %>
 		</div>
 	</main>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script src="/scripts/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 	<script src="/scripts/validateClientForms.js"></script>
 </body>
 </html>

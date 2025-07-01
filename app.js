@@ -89,9 +89,12 @@ const styleSrcUrls = [
     "https://cdn.maptiler.com/"
 ];
 const connectSrcUrls = [
-    "https://api.maptiler.com/"
+    "https://api.maptiler.com/",
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = [
+	"https://fonts.googleapis.com",
+	"https://fonts.gstatic.com"
+];
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
