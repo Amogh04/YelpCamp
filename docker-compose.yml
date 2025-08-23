@@ -1,0 +1,27 @@
+version: "1.0.0"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_SECRET=${CLOUDINARY_SECRET}
+      - MAPTILER_API_KEY=${MAPTILER_API_KEY}
+      - DB_URL=${DB_URL}
+      - SECRET=${SECRET}
+      - EMAIL=${EMAIL}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

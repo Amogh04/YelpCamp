@@ -28,7 +28,7 @@ const seedDB = async() =>{
 		const geoData = await maptilerClient.geocoding.forward(location, { limit: 1 });
 		const camp = new Campground({
 			location: location,
-			price: Math.floor(Math.random()*30+10),
+			price: Math.floor(Math.random()*1500+10),
 			title: `${sample(titles.descriptors)} ${sample(titles.places)}`,
 			images: [
 				{
@@ -40,7 +40,7 @@ const seedDB = async() =>{
 					filename: `${i+11}`
 				}
 			],
-			author: '6859d0350ee40aff5991a735',
+			author: '685f1c1fe0f1db52ce9ada12',
 			description: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium, fugit inventore facere quod eveniet, sequi dignissimos sit, iusto deleniti eligendi distinctio error praesentium a alias amet suscipit fuga, assumenda non.`,
 			geometry: geoData.features[0].geometry
 		})
