@@ -2,25 +2,20 @@ const Campground = require('../models/campground');
 const User = require('../models/user');
 const Review = require('../models/review');
 const { cloudinary } = require('../cloudinary');
-
 const MagicLinkStrategy = require('passport-magic-link').Strategy;
-const sendgrid = require('@sendgrid/mail');
-sendgrid.setApiKey(process.env['SENDGRID_API_KEY']);
+const { Resend } = require('resend');
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const randomstring = require('randomstring');
 
 async function sendEmail(to, msg) {
-	const msgData = {
-		to,
-		from: process.env.EMAIL,
-		subject: 'OTP Verification for YelpCamp',
-		html: msg
-	};
-	try{
-		await sendgrid.send(msgData);
-	}
-	catch(e){
-		console.log('error: ', e);
-	}
+    const resend = new Resend(RESEND_API_KEY);
+    resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to: to,
+    subject: 'YelpCamp OTP Verification',
+    html: msg
+    });
+
 }
 
 module.exports.verifyEmail = async(req, res) => {
